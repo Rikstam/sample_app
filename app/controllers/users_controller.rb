@@ -9,10 +9,17 @@ class UsersController < ApplicationController
   end
  
   def new
+    if signed_in?
+      redirect_to(root_path)
+    else
     @user = User.new
+  end
   end
   
   def create
+    if signed_in?
+      redirect_to(root_path)
+    else
     @user = User.new(params[:user])
     if @user.save
       #handle a successful save.
@@ -22,6 +29,7 @@ class UsersController < ApplicationController
     else
       render 'new'
     end
+  end
   end
   
   def edit
@@ -45,11 +53,13 @@ class UsersController < ApplicationController
   end
    
    def destroy
+    
        User.find(params[:id]).destroy
        flash[:success] = "User destroyed."
        redirect_to users_url
-     end
+     
    
+   end
    
    private
 
